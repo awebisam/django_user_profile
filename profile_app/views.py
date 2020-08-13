@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import *
+from .models import *
+from rest_framework.authentication import TokenAuthentication
 
 
 class HelloApiView(APIView):
@@ -56,3 +58,8 @@ class HelloViewSet(viewsets.ViewSet):
         ]
 
         return Response({'message': 'Hello', 'a_viewset': a_viewset})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer

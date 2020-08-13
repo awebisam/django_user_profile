@@ -8,6 +8,7 @@ class HelloSerializer(serializers.Serializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = UserProfile
         fields = ['id', 'email', 'name', 'password']
@@ -19,3 +20,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 }
             }
         }
+
+    def create(self, validated_data):
+        """Create and return New User"""
+        user = UserProfile.objects.create_user(
+            email=validated_data['email'],
+            name=validated_data['name'],
+            password=validated_data['password'],
+        )
+        return user
