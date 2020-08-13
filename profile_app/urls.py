@@ -10,5 +10,6 @@ app_name = "profiles"
 
 urlpatterns = [
     path("api/", views.HelloApiView.as_view(), name="hello"),
+    path("login/", views.UserLoginApiView.as_view(), name="login"),
     path('', include(router.urls))
 ]
