@@ -5,6 +5,7 @@ from rest_framework import status
 from .serializers import *
 from .models import *
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
 from .permissions import UpdateOwnProfile
 
 
@@ -66,3 +67,5 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (UpdateOwnProfile,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'email',)
