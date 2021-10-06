@@ -5,23 +5,25 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 class UserProfileManager(BaseUserManager):
     """Custom model manager for UserProfile"""
 
-    def create_user(self, email, name, password=None):
+    def create_user(self, email, name, password=None, **kwargs):
         """Change New User Profile Function"""
         if not email:
             raise ValueError('User Must Have an Email Address')
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name)
+        user = self.model(email=email, name=name, **kwargs)
         user.set_password(password)
         user.save(using=self._db)
-
         return user
 
-    def create_superuser(self, email, name, password):
+    def create_superuser(self, email, name, password,  **kwargs):
         '''Create and save superuser'''
-        user = self.create_user(email, name, password)
-        user.is_superuser = True
-        user.is_staff = True
-        user.save(using=self._db)
+        kwargs.setdefault('is_staff', True)
+        kwargs.setdefault('is_superuser', True)
+        if kwargs.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if kwargs.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self.create_user(email, name, password, **kwargs)
 
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
